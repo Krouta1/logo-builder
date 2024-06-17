@@ -8,22 +8,22 @@ function App() {
   const [selectedIndex, setSelectedIndex] = useState(1);
 
   return (
-    <>
+    <div>
       <Header />
-      <div className="fixed w-64">
+      <div className="fixed top-20 w-64">
         <SideNav
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
         />
       </div>
-      <div className="ml-64 grid grid-cols-1 md:grid-cols-6">
-        <div className="h-screen border p-5 shadow-sm md:col-span-2">
+      <div className="ml-64 mt-20 grid grid-cols-1 overflow-auto xl:grid-cols-6">
+        <div className="h-screen border p-5 shadow-sm xl:col-span-2">
           {selectedIndex === 1 ? <IconController /> : <BackgroundController />}
         </div>
-        <div className="md:col-span-3">Icon preview</div>
-        <div className="md:col-span-1">Adds</div>
+        <div className="xl:col-span-3">Icon preview</div>
+        <div className="xl:col-span-1">Adds</div>
       </div>
-    </>
+    </div>
   );
 }
 

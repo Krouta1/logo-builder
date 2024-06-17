@@ -1,10 +1,25 @@
 import { SmileIcon } from "lucide-react";
 import { Slider } from "./ui/slider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ColorPickerController from "./ColorPickerController";
 
 const IconController = () => {
   const [size, setSize] = useState(280);
   const [rotate, setRotate] = useState(0);
+  const [color, setColor] = useState("rgba(255,255,255,1)");
+  const localStorageValue = JSON.parse(localStorage.getItem("value"));
+
+  useEffect(() => {
+    const updatedValue = {
+      ...localStorageValue,
+      iconSize: size,
+      iconRotate: rotate,
+      iconColor: color,
+      icon: "SmileIcon",
+    };
+
+    localStorage.setItem("value", JSON.stringify(updatedValue));
+  }, [size, rotate, color, localStorageValue]);
 
   return (
     <div>
@@ -42,6 +57,15 @@ const IconController = () => {
             step={1}
             onValueChange={(event) => setRotate(event[0])}
           />
+        </div>
+        <div className="py-2">
+          <label
+            htmlFor=""
+            className="flex items-center justify-between p-2 font-bold"
+          >
+            Color
+          </label>
+          <ColorPickerController selectedColor={(color) => setColor(color)} />
         </div>
       </div>
     </div>
