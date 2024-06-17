@@ -51,4 +51,37 @@ const LogoPreview = () => {
   );
 };
 
-export default LogoPreview;
+// export default LogoPreview;
+
+// import React from "react";
+// import { useUpdateStorage } from "./UpdateStorageContext";
+
+// const BackgroundController = () => {
+//   const { storage, updateStorage } = useUpdateStorage();
+
+//   // Handlers to update context values
+//   const handleRoundedChange = (newRounded) => {
+//     updateStorage({ bgRounded: newRounded });
+//   };
+
+//   const handlePaddingChange = (newPadding) => {
+//     updateStorage({ bgPadding: newPadding });
+//   };
+
+//   const handleColorChange = (newColor) => {
+//     updateStorage({ bgColor: newColor });
+//   };
+
+//   // Use storage values directly from context
+//   return (
+//     <div>
+//       {/* Example usage */}
+//       <input
+//         type="number"
+//         value={storage.bgRounded}
+//         onChange={(e) => handleRoundedChange(e.target.value)}
+//       />
+//       {/* Similar for padding and color */}
+//     </div>
+//   );
+// };
