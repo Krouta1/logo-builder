@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import ColorPickerController from "./ColorPickerController";
 
 const IconController = () => {
-  const [size, setSize] = useState(280);
-  const [rotate, setRotate] = useState(0);
-  const [color, setColor] = useState("rgba(255,255,255,1)");
   const localStorageValue = JSON.parse(localStorage.getItem("value"));
+  const [size, setSize] = useState(localStorageValue?.iconSize || 280);
+  const [rotate, setRotate] = useState(localStorageValue?.iconRotate || 0);
+  const [color, setColor] = useState(
+    localStorageValue?.iconColor || "rgba(255,255,255,1)",
+  );
 
   useEffect(() => {
     const updatedValue = {
@@ -38,7 +40,7 @@ const IconController = () => {
             Size <span>{size} px</span>
           </label>
           <Slider
-            defaultValue={[280]}
+            defaultValue={[size]}
             max={512}
             step={1}
             onValueChange={(event) => setSize(event[0])}
@@ -52,7 +54,7 @@ const IconController = () => {
             Rotate <span>{rotate} °</span>
           </label>
           <Slider
-            defaultValue={[0]}
+            defaultValue={[rotate]}
             max={360}
             step={1}
             onValueChange={(event) => setRotate(event[0])}
@@ -65,7 +67,7 @@ const IconController = () => {
           >
             Color
           </label>
-          <ColorPickerController selectedColor={(color) => setColor(color)} />
+          <ColorPickerController color={color} setColor={setColor} />
         </div>
       </div>
     </div>
