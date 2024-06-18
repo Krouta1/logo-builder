@@ -1,29 +1,38 @@
 import { Slider } from "./ui/slider";
 import { useContext, useEffect, useState } from "react";
 import ColorPickerController from "./ColorPickerController";
-import { UpdateStorageContext } from "../context/UpdateStorageContext";
-import { Smile } from "lucide-react";
+import IconList from "./IconList";
+import { useUpdateStorage } from "../context/UpdateStorageContext";
 
 const IconController = () => {
-  const { updateStorage, setUpdateStorage } = useContext(UpdateStorageContext);
-  const localStorageValue = JSON.parse(localStorage.getItem("value"));
-  const [size, setSize] = useState(updateStorage.iconSize || 280);
-  const [rotate, setRotate] = useState(updateStorage.iconRotate || 0);
-  const [color, setColor] = useState(
-    updateStorage.iconColor || "rgba(255,255,255,1)",
-  );
+  const { storage, updateStorage } = useUpdateStorage();
+  const { iconSize, iconRotate, iconColor } = storage;
 
-  useEffect(() => {
-    const updatedValue = {
-      ...localStorageValue,
-      iconSize: size,
-      iconRotate: rotate,
-      iconColor: color,
-      icon: "Smile",
-    };
-    setUpdateStorage(updatedValue);
-    localStorage.setItem("value", JSON.stringify(updatedValue));
-  }, [size, rotate, color, localStorageValue, setUpdateStorage]);
+  const handleSizeChange = (newSize) => {
+    updateStorage({ iconSize: newSize });
+  };
+
+  const handleRotateChange = (newRotate) => {
+    updateStorage({ iconRotate: newRotate });
+  };
+
+  const handleColorChange = (newColor) => {
+    updateStorage({ iconColor: newColor });
+  };
+
+  const handleInputSizeChange = (event) => {
+    const newSize = Number(event.target.value);
+    if (newSize >= 0 && newSize <= 512) {
+      handleSizeChange(newSize);
+    }
+  };
+
+  const handleInputRotateChange = (event) => {
+    const newRotate = Number(event.target.value);
+    if (newRotate >= 0 && newRotate <= 360) {
+      handleRotateChange(newRotate);
+    }
+  };
 
   return (
     <div>
@@ -31,35 +40,53 @@ const IconController = () => {
         <label htmlFor="" className="font-bold">
           Icon
         </label>
-        <div className="my-2 flex h-[50px] w-[50px] cursor-pointer items-center justify-center rounded-md bg-gray-200 p-3">
-          <Smile className="" />
+        <div>
+          <IconList/>
         </div>
         <div className="py-2">
-          <label
-            htmlFor=""
-            className="flex items-center justify-between p-2 font-bold"
-          >
-            Size <span>{size} px</span>
-          </label>
+          <div className="flex items-center justify-between p-2 font-bold">
+            <span>Size</span>
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                value={iconSize}
+                min="0"
+                max="512"
+                step="1"
+                onChange={handleInputSizeChange}
+                className="ml-2 w-16 border rounded p-1 text-center"
+              />
+              <span>px</span>
+            </div>
+          </div>
           <Slider
-            defaultValue={[size]}
+            defaultValue={[iconSize]}
             max={512}
             step={1}
-            onValueChange={(event) => setSize(event[0])}
+            onValueChange={(event) => handleSizeChange(event[0])}
           />
         </div>
         <div className="py-2">
-          <label
-            htmlFor=""
-            className="flex items-center justify-between p-2 font-bold"
-          >
-            Rotate <span>{rotate} °</span>
-          </label>
+          <div className="flex items-center justify-between p-2 font-bold">
+            <span>Rotate</span>
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                value={iconRotate}
+                min="0"
+                max="360"
+                step="1"
+                onChange={handleInputRotateChange}
+                className="ml-2 w-16 border rounded p-1 text-center"
+              />
+              <span>°</span>
+            </div>
+          </div>
           <Slider
-            defaultValue={[rotate]}
+            defaultValue={[iconRotate]}
             max={360}
             step={1}
-            onValueChange={(event) => setRotate(event[0])}
+            onValueChange={(event) => handleRotateChange(event[0])}
           />
         </div>
         <div className="py-2">
@@ -69,7 +96,7 @@ const IconController = () => {
           >
             Color
           </label>
-          <ColorPickerController color={color} setColor={setColor} />
+          <ColorPickerController color={iconColor} setColor={handleColorChange} />
         </div>
       </div>
     </div>
