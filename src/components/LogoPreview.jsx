@@ -1,13 +1,19 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { icons } from "lucide-react";
-import {useUpdateStorage} from "../context/UpdateStorageContext"
+import { useUpdateStorage } from "../context/UpdateStorageContext";
 
 const LogoPreview = () => {
-
   const { storage, updateStorage } = useUpdateStorage();
-  const {bgRounded, bgPadding,bgColor,iconSize, iconRotate,iconColor,icon} = storage
-
+  const {
+    bgRounded,
+    bgPadding,
+    bgColor,
+    iconSize,
+    iconRotate,
+    iconColor,
+    icon,
+  } = storage;
 
   const Icon = ({ name, size, color }) => {
     const LucidIcon = icons[name];
@@ -31,17 +37,14 @@ const LogoPreview = () => {
         }}
       >
         <div
+          id="logo-preview"
           className="flex h-full w-full items-center justify-center"
           style={{
             borderRadius: `${bgRounded}%`,
             background: bgColor,
           }}
         >
-          <Icon
-            size={iconSize}
-            color={iconColor}
-            name={icon}
-          />
+          <Icon size={iconSize} color={iconColor} name={icon} />
         </div>
       </div>
     </div>
@@ -49,4 +52,3 @@ const LogoPreview = () => {
 };
 
 export default LogoPreview;
-

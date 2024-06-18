@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+/* eslint-disable react/prop-types */
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 const UpdateStorageContext = createContext();
 
@@ -25,10 +26,14 @@ const storageReducer = (state, action) => {
 };
 
 export const UpdateStorageProvider = ({ children }) => {
-  const [storage, dispatch] = useReducer(storageReducer, initialState, (initial) => {
-    const localStorageValue = JSON.parse(localStorage.getItem("value")) || {};
-    return { ...initial, ...localStorageValue };
-  });
+  const [storage, dispatch] = useReducer(
+    storageReducer,
+    initialState,
+    (initial) => {
+      const localStorageValue = JSON.parse(localStorage.getItem("value")) || {};
+      return { ...initial, ...localStorageValue };
+    },
+  );
 
   useEffect(() => {
     localStorage.setItem("value", JSON.stringify(storage));
