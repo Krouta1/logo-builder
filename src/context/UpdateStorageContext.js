@@ -1,36 +1,48 @@
-import { createContext } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
 
-export const UpdateStorageContext = createContext(null);
+const UpdateStorageContext = createContext();
 
-// TODO fix states in controllers
+const initialState = {
+  bgRounded: 0,
+  bgPadding: 40,
+  bgColor: "rgba(5,5,5,100)",
+  iconSize: 280,
+  iconRotate: 0,
+  iconColor: "rgba(255,255,255,10)",
+  icon: "Anvil",
+  pageIndex: 1,
+};
 
-// import React, { createContext, useContext, useEffect, useState } from "react";
+const SET_STORAGE = "SET_STORAGE";
 
-// const UpdateStorageContext = createContext();
+const storageReducer = (state, action) => {
+  switch (action.type) {
+    case SET_STORAGE:
+      return { ...state, ...action.payload };
+    default:
+      return state;
+  }
+};
 
-// export const UpdateStorageProvider = ({ children }) => {
-//   const [storage, setStorage] = useState(() => {
-//     const localStorageValue = JSON.parse(localStorage.getItem("value")) || {};
-//     return {
-//       bgRounded: localStorageValue.bgRounded || 0,
-//       bgPadding: localStorageValue.bgPadding || 40,
-//       bgColor: localStorageValue.bgColor || "rgba(5,5,5,100)",
-//     };
-//   });
+export const UpdateStorageProvider = ({ children }) => {
+  const [storage, dispatch] = useReducer(storageReducer, initialState, (initial) => {
+    const localStorageValue = JSON.parse(localStorage.getItem("value")) || {};
+    return { ...initial, ...localStorageValue };
+  });
 
-//   useEffect(() => {
-//     localStorage.setItem("value", JSON.stringify(storage));
-//   }, [storage]);
+  useEffect(() => {
+    localStorage.setItem("value", JSON.stringify(storage));
+  }, [storage]);
 
-//   const updateStorage = (updates) => {
-//     setStorage((prev) => ({ ...prev, ...updates }));
-//   };
+  const updateStorage = (updates) => {
+    dispatch({ type: SET_STORAGE, payload: updates });
+  };
 
-//   return (
-//     <UpdateStorageContext.Provider value={{ storage, updateStorage }}>
-//       {children}
-//     </UpdateStorageContext.Provider>
-//   );
-// };
+  return (
+    <UpdateStorageContext.Provider value={{ storage, updateStorage }}>
+      {children}
+    </UpdateStorageContext.Provider>
+  );
+};
 
-// export const useUpdateStorage = () => useContext(UpdateStorageContext);
+export const useUpdateStorage = () => useContext(UpdateStorageContext);
